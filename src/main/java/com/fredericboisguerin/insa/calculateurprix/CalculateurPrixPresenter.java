@@ -10,9 +10,17 @@ public class CalculateurPrixPresenter {
         this.calculateurPrixView = calculateurPrixView;
     }
 
-    public void onComputeButtonClicked(String montantArticleAsText) {
+    public void onComputeButtonClicked(String montantArticleAsText, String quantityAsText) {
         BigDecimal articlePrice = new BigDecimal(montantArticleAsText);
-        BigDecimal roundedValue = articlePrice.setScale(2, RoundingMode.HALF_EVEN);
+        Integer quantity = Integer.valueOf(quantityAsText);
+
+        BigDecimal totalWithoutTax = calculateTotalAmountWithoutTax(articlePrice, quantity);
+
+        BigDecimal roundedValue = totalWithoutTax.setScale(2, RoundingMode.HALF_EVEN);
         calculateurPrixView.setOrderAmountWithoutTax(roundedValue);
+    }
+
+    private static BigDecimal calculateTotalAmountWithoutTax(BigDecimal articlePrice, Integer quantity) {
+        return articlePrice.multiply(new BigDecimal(quantity));
     }
 }
