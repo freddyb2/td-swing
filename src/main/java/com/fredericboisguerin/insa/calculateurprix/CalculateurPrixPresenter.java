@@ -1,5 +1,8 @@
 package com.fredericboisguerin.insa.calculateurprix;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class CalculateurPrixPresenter {
     private final CalculateurPrixView calculateurPrixView;
 
@@ -8,6 +11,8 @@ public class CalculateurPrixPresenter {
     }
 
     public void onComputeButtonClicked(String montantArticleAsText) {
-        calculateurPrixView.afficherErreur("Allez, au boulot ! :)");
+        BigDecimal articlePrice = new BigDecimal(montantArticleAsText);
+        BigDecimal roundedValue = articlePrice.setScale(2, RoundingMode.HALF_EVEN);
+        calculateurPrixView.setOrderAmountWithoutTax(roundedValue);
     }
 }

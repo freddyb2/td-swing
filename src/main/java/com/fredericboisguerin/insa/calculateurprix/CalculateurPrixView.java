@@ -7,6 +7,7 @@ import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import javax.swing.*;
 public class CalculateurPrixView extends JFrame {
 
     private final CalculateurPrixPresenter presenter;
+    private final JFormattedTextField montantHTTextField;
 
     public CalculateurPrixView() throws HeadlessException {
         super("Calculateur de prix");
@@ -25,7 +27,7 @@ public class CalculateurPrixView extends JFrame {
         prixArticleTextField.setToolTipText("Entrez ici le montant d'un article");
 
         JLabel montantHTLabel = new JLabel("Montant HT : ");
-        JFormattedTextField montantHTTextField = new JFormattedTextField(NumberFormat.getCurrencyInstance());
+        montantHTTextField = new JFormattedTextField(NumberFormat.getCurrencyInstance());
         montantHTTextField.setValue(15);
         montantHTTextField.setEditable(false);
         montantHTLabel.setLabelFor(montantHTTextField);
@@ -63,5 +65,9 @@ public class CalculateurPrixView extends JFrame {
         this.pack();
         this.setVisible(true);
         this.setLocationRelativeTo(null);
+    }
+
+    public void setOrderAmountWithoutTax(BigDecimal orderAmountWithoutTax) {
+        montantHTTextField.setValue(orderAmountWithoutTax);
     }
 }
