@@ -15,9 +15,15 @@ public class CalculateurPrixPresenter {
         Integer quantity = Integer.valueOf(quantityAsText);
 
         BigDecimal totalWithoutTax = calculateTotalAmountWithoutTax(articlePrice, quantity);
+        BigDecimal frenchTaxRate = new BigDecimal("1.20");
+        BigDecimal totalWithTax = totalWithoutTax.multiply(frenchTaxRate);
 
-        BigDecimal roundedValue = totalWithoutTax.setScale(2, RoundingMode.HALF_EVEN);
-        calculateurPrixView.setOrderAmountWithoutTax(roundedValue);
+        calculateurPrixView.setOrderAmountWithoutTax(roundValue(totalWithoutTax));
+        calculateurPrixView.setOrderAmountWithTax(roundValue(totalWithTax));
+    }
+
+    private BigDecimal roundValue(BigDecimal totalWithoutTax) {
+        return totalWithoutTax.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     private static BigDecimal calculateTotalAmountWithoutTax(BigDecimal articlePrice, Integer quantity) {
