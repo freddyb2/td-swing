@@ -15,10 +15,10 @@ import com.fredericboisguerin.insa.calculateurprix.CalculateurPrixPresenter;
 public class CalculateurPrixView extends JFrame {
 
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 10;
-    private static final int DEFAULT_MARGIN = 20;
+    private static final int DEFAULT_MARGIN = 10;
     private static final int DEFAULT_PADDING = 10;
     private static final int NUMBER_OF_COLUMNS_IN_FORM = 2;
-    private static final int NUMBER_OF_ROWS_IN_FORM = 4;
+    private static final int NUMBER_OF_ROWS_IN_FORM = 5;
 
     private final JTextField quantityTextField = buildInputTextField();
     private final JTextField prixArticleTextField = buildInputTextField();
@@ -26,6 +26,7 @@ public class CalculateurPrixView extends JFrame {
     private final JFormattedTextField montantTTCTextField = buildAmountTextField();
 
     private final CalculateurPrixPresenter presenter;
+    private final JComboBox<Country> countryComboBox = new JComboBox<>(Country.values());
 
     public CalculateurPrixView() throws HeadlessException {
         super("Calculateur de prix");
@@ -37,18 +38,22 @@ public class CalculateurPrixView extends JFrame {
         JLabel quantityLabel = new JLabel("Quantité : ");
         quantityLabel.setLabelFor(quantityTextField);
 
+        JLabel countryLabel = new JLabel("Pays :");
+        countryLabel.setLabelFor(countryComboBox);
+
         JLabel montantHTLabel = new JLabel("Montant HT : ");
         montantHTLabel.setLabelFor(montantHTTextField);
 
-        JLabel montantTTCLabel = new JLabel("Montant TTC (France) : ");
+        JLabel montantTTCLabel = new JLabel("Montant TTC : ");
         montantTTCLabel.setLabelFor(montantTTCTextField);
 
         JButton computeButton = new JButton("Calculer");
-        computeButton.addActionListener(e -> onComputeButtonClicked(prixArticleTextField));
+        computeButton.addActionListener(e -> onComputeButtonClicked());
 
         SpringPanel formPanel = new SpringPanel();
         addLabelAndFieldInPanel(prixArticleLabel, prixArticleTextField, formPanel);
         addLabelAndFieldInPanel(quantityLabel, quantityTextField, formPanel);
+        addLabelAndFieldInPanel(countryLabel, countryComboBox, formPanel);
         addLabelAndFieldInPanel(montantHTLabel, montantHTTextField, formPanel);
         addLabelAndFieldInPanel(montantTTCLabel, montantTTCTextField, formPanel);
         formPanel.makeCompactGrid(NUMBER_OF_ROWS_IN_FORM, NUMBER_OF_COLUMNS_IN_FORM, DEFAULT_MARGIN, DEFAULT_PADDING);
@@ -75,10 +80,10 @@ public class CalculateurPrixView extends JFrame {
         montantTTCTextField.setValue(orderAmountWithTax);
     }
 
-    private void onComputeButtonClicked(JTextField prixArticleTextField) {
+    private void onComputeButtonClicked() {
         String prixArticleAsText = prixArticleTextField.getText();
         String quantityAsText = quantityTextField.getText();
-        presenter.onComputeButtonClicked(prixArticleAsText, quantityAsText);
+        presenter.onComputeButtonClicked(prixArticleAsText, quantityAsText, (Country) countryComboBox.getSelectedItem());
     }
 
     private static void addLabelAndFieldInPanel(JComponent label, JComponent field, JPanel p) {

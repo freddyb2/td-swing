@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import com.fredericboisguerin.insa.calculateurprix.ui.CalculateurPrixView;
+import com.fredericboisguerin.insa.calculateurprix.ui.Country;
 
 public class CalculateurPrixPresenter {
     private final CalculateurPrixView calculateurPrixView;
@@ -12,13 +13,12 @@ public class CalculateurPrixPresenter {
         this.calculateurPrixView = calculateurPrixView;
     }
 
-    public void onComputeButtonClicked(String montantArticleAsText, String quantityAsText) {
+    public void onComputeButtonClicked(String montantArticleAsText, String quantityAsText, Country country) {
         BigDecimal articlePrice = new BigDecimal(montantArticleAsText);
         Integer quantity = Integer.valueOf(quantityAsText);
 
         BigDecimal totalWithoutTax = calculateTotalAmountWithoutTax(articlePrice, quantity);
-        BigDecimal frenchTaxRate = new BigDecimal("1.20");
-        BigDecimal totalWithTax = totalWithoutTax.multiply(frenchTaxRate);
+        BigDecimal totalWithTax = country.addTAV(totalWithoutTax);
 
         calculateurPrixView.setOrderAmountWithoutTax(roundValue(totalWithoutTax));
         calculateurPrixView.setOrderAmountWithTax(roundValue(totalWithTax));
