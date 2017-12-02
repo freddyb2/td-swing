@@ -1,9 +1,7 @@
-package com.fredericboisguerin.insa.calculateurprix;
+package com.fredericboisguerin.insa.calculateurprix.ui;
 
-import static java.awt.BorderLayout.EAST;
+import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
-import static java.awt.BorderLayout.WEST;
-import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.*;
@@ -12,14 +10,18 @@ import java.text.NumberFormat;
 
 import javax.swing.*;
 
+import com.fredericboisguerin.insa.calculateurprix.CalculateurPrixPresenter;
+
 public class CalculateurPrixView extends JFrame {
 
     private static final int DEFAULT_TEXT_FIELD_WIDTH = 10;
     private static final int DEFAULT_MARGIN = 20;
+    private static final int DEFAULT_PADDING = 10;
+    private static final int NUMBER_OF_COLUMNS_IN_FORM = 2;
+    private static final int NUMBER_OF_ROWS_IN_FORM = 4;
 
     private final CalculateurPrixPresenter presenter;
-    private final JFormattedTextField montantHTTextField;
-    private final JFormattedTextField montantTTCTextField;
+    private final JFormattedTextField montantHTTextField, montantTTCTextField;
     private final JTextField quantityTextField = new JTextField(DEFAULT_TEXT_FIELD_WIDTH);
 
     public CalculateurPrixView() throws HeadlessException {
@@ -48,27 +50,15 @@ public class CalculateurPrixView extends JFrame {
         JButton computeButton = new JButton("Calculer");
         computeButton.addActionListener(e -> onComputeButtonClicked(prixArticleTextField));
 
-        JPanel contentPane = new JPanel();
-        setContentPane(contentPane);
-        contentPane.add(prixArticleTextField);
+        SpringPanel formPanel = new SpringPanel();
+        addLabelAndFieldInPanel(prixArticleLabel, prixArticleTextField, formPanel);
+        addLabelAndFieldInPanel(quantityLabel, quantityTextField, formPanel);
+        addLabelAndFieldInPanel(montantHTLabel, montantHTTextField, formPanel);
+        addLabelAndFieldInPanel(montantTTCLabel, montantTTCTextField, formPanel);
+        formPanel.makeCompactGrid(NUMBER_OF_ROWS_IN_FORM, NUMBER_OF_COLUMNS_IN_FORM, DEFAULT_MARGIN, DEFAULT_PADDING);
 
-        JPanel labelPane = new JPanel(new GridLayout(0, 1));
-        labelPane.add(prixArticleLabel);
-        labelPane.add(quantityLabel);
-        labelPane.add(montantHTLabel);
-        labelPane.add(montantTTCLabel);
-
-        JPanel fieldPane = new JPanel(new GridLayout(0, 1));
-        fieldPane.add(prixArticleTextField);
-        fieldPane.add(quantityTextField);
-        fieldPane.add(montantHTTextField);
-        fieldPane.add(montantTTCTextField);
-
-        contentPane.setBorder(BorderFactory.createEmptyBorder(DEFAULT_MARGIN, DEFAULT_MARGIN, DEFAULT_MARGIN, DEFAULT_MARGIN));
-        add(labelPane, WEST);
-        add(fieldPane, EAST);
+        add(formPanel, NORTH);
         add(computeButton, SOUTH);
-
         prixArticleTextField.requestFocus();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -96,5 +86,10 @@ public class CalculateurPrixView extends JFrame {
 
     private static JFormattedTextField buildTextFieldForCurrency() {
         return new JFormattedTextField(NumberFormat.getCurrencyInstance());
+    }
+
+    private static void addLabelAndFieldInPanel(JComponent label, JComponent field, JPanel p) {
+        p.add(label);
+        p.add(field);
     }
 }

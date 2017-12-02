@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import com.fredericboisguerin.insa.calculateurprix.ui.CalculateurPrixView;
+
 public class CalculateurPrixPresenterTest {
 
 

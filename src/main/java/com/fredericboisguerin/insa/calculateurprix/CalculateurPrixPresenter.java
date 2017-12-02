@@ -3,6 +3,8 @@ package com.fredericboisguerin.insa.calculateurprix;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import com.fredericboisguerin.insa.calculateurprix.ui.CalculateurPrixView;
+
 public class CalculateurPrixPresenter {
     private final CalculateurPrixView calculateurPrixView;
 
