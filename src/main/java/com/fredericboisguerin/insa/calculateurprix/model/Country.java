@@ -1,9 +1,5 @@
 package com.fredericboisguerin.insa.calculateurprix.model;
 
-import static java.math.BigDecimal.ONE;
-
-import java.math.BigDecimal;
-
 public enum Country {
 
     BELGIQUE("Belgique", 0.21),
@@ -32,7 +28,6 @@ public enum Country {
     public double getTaxRate() {
         return taxRate;
     }
-
 
     @Override
     public String toString() {
