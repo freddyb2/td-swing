@@ -10,7 +10,7 @@ import java.text.NumberFormat;
 
 import javax.swing.*;
 
-import com.fredericboisguerin.insa.calculateurprix.CalculateurPrixPresenter;
+import com.fredericboisguerin.insa.calculateurprix.model.Country;
 
 public class CalculateurPrixView extends JFrame {
 
@@ -25,12 +25,12 @@ public class CalculateurPrixView extends JFrame {
     private final JFormattedTextField montantHTTextField = buildAmountTextField();
     private final JFormattedTextField montantTTCTextField = buildAmountTextField();
 
-    private final CalculateurPrixPresenter presenter;
     private final JComboBox<Country> countryComboBox = new JComboBox<>(Country.values());
+
+    private CalculateurPrixPresenter listener;
 
     public CalculateurPrixView() throws HeadlessException {
         super("Calculateur de prix");
-        this.presenter = new CalculateurPrixPresenter(this);
 
         JLabel prixArticleLabel = new JLabel("Prix d'un article (€) : ");
         prixArticleLabel.setLabelFor(prixArticleTextField);
@@ -83,7 +83,7 @@ public class CalculateurPrixView extends JFrame {
     private void onComputeButtonClicked() {
         String prixArticleAsText = prixArticleTextField.getText();
         String quantityAsText = quantityTextField.getText();
-        presenter.onComputeButtonClicked(prixArticleAsText, quantityAsText, (Country) countryComboBox.getSelectedItem());
+        listener.onComputeButtonClicked(prixArticleAsText, quantityAsText, (Country) countryComboBox.getSelectedItem());
     }
 
     private static void addLabelAndFieldInPanel(JComponent label, JComponent field, JPanel p) {
@@ -99,5 +99,9 @@ public class CalculateurPrixView extends JFrame {
         JFormattedTextField jFormattedTextField = new JFormattedTextField(NumberFormat.getCurrencyInstance());
         jFormattedTextField.setEditable(false);
         return jFormattedTextField;
+    }
+
+    public void setListener(CalculateurPrixPresenter listener) {
+        this.listener = listener;
     }
 }

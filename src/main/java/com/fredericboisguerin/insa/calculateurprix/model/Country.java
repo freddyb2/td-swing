@@ -1,4 +1,4 @@
-package com.fredericboisguerin.insa.calculateurprix.ui;
+package com.fredericboisguerin.insa.calculateurprix.model;
 
 import static java.math.BigDecimal.ONE;
 
@@ -22,16 +22,17 @@ public enum Country {
     SUEDE("Suède", 0.25);
 
     private final String asText;
-    private final BigDecimal taxRate;
+    private final double taxRate;
 
     Country(String asText, double taxRate) {
         this.asText = asText;
-        this.taxRate = BigDecimal.valueOf(taxRate);
+        this.taxRate = taxRate;
     }
 
-    public BigDecimal addTAV(BigDecimal amountWithoutTax) {
-        return amountWithoutTax.multiply(ONE.add(taxRate));
+    public double getTaxRate() {
+        return taxRate;
     }
+
 
     @Override
     public String toString() {
