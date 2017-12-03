@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import com.fredericboisguerin.insa.calculateurprix.model.Country;
 
 public class AmountCalculator {
+
     public BigDecimal calculateTotal(BigDecimal articlePrice, int quantity) {
         return roundValueOf(totalAmountWithoutTaxFor(articlePrice, quantity));
     }

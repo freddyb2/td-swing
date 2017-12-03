@@ -1,4 +1,4 @@
-package com.fredericboisguerin.insa.calculateurprix;
+package com.fredericboisguerin.insa.calculateurprix.ui;
 
 import static com.fredericboisguerin.insa.calculateurprix.model.Country.FRANCE;
 import static java.math.BigDecimal.ONE;
