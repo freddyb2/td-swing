@@ -2,8 +2,8 @@ package com.fredericboisguerin.insa.calculateurprix.ui;
 
 import java.math.BigDecimal;
 
-import com.fredericboisguerin.insa.calculateurprix.model.Country;
 import com.fredericboisguerin.insa.calculateurprix.core.AmountCalculator;
+import com.fredericboisguerin.insa.calculateurprix.model.Country;
 import com.fredericboisguerin.insa.calculateurprix.ui.converter.InvalidAmount;
 import com.fredericboisguerin.insa.calculateurprix.ui.converter.InvalidQuantity;
 import com.fredericboisguerin.insa.calculateurprix.ui.converter.UserInputConverter;

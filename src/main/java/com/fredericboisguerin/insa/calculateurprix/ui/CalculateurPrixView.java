@@ -3,7 +3,6 @@ package com.fredericboisguerin.insa.calculateurprix.ui;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
 import static javax.swing.JOptionPane.ERROR_MESSAGE;
-import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.*;
 import java.math.BigDecimal;

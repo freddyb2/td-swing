@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class SpringPanel extends JPanel {
 
-    public SpringPanel() {
+    SpringPanel() {
         super(new SpringLayout());
     }
 
