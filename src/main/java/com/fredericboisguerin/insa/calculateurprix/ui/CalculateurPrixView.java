@@ -2,6 +2,7 @@ package com.fredericboisguerin.insa.calculateurprix.ui;
 
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.SOUTH;
+import static javax.swing.JOptionPane.ERROR_MESSAGE;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 import java.awt.*;
@@ -103,5 +104,9 @@ public class CalculateurPrixView extends JFrame {
 
     public void setListener(CalculateurPrixPresenter listener) {
         this.listener = listener;
+    }
+
+    public void displayError(String errorMessage) {
+        JOptionPane.showMessageDialog(this, errorMessage, "Error", ERROR_MESSAGE);
     }
 }

@@ -3,6 +3,7 @@ package com.fredericboisguerin.insa.calculateurprix.ui;
 import static com.fredericboisguerin.insa.calculateurprix.model.Country.FRANCE;
 import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.TEN;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.eq;
@@ -20,45 +21,49 @@ import org.mockito.Mock;
 
 import com.fredericboisguerin.insa.calculateurprix.core.AmountCalculator;
 import com.fredericboisguerin.insa.calculateurprix.model.Country;
-import com.fredericboisguerin.insa.calculateurprix.ui.CalculateurPrixPresenter;
-import com.fredericboisguerin.insa.calculateurprix.ui.CalculateurPrixView;
+import com.fredericboisguerin.insa.calculateurprix.ui.converter.InvalidAmount;
+import com.fredericboisguerin.insa.calculateurprix.ui.converter.InvalidQuantity;
+import com.fredericboisguerin.insa.calculateurprix.ui.converter.UserInputConverter;
 
 public class CalculateurPrixPresenterTest {
 
     private static final BigDecimal CALCULATED_AMOUNT_WITHOUT_TAX = ONE;
     private static final BigDecimal CALCULATED_AMOUNT_WITH_TAX = TEN;
-    private static final String SOME_AMOUNT_PER_ARTICLE = "123";
-    private static final String SOME_QUANTITY = "456";
+    private static final String SOME_AMOUNT_PER_ARTICLE = "1";
+    private static final String SOME_QUANTITY = "2";
     private static final Country SOME_COUNTRY = FRANCE;
+    private static final String INVALID_AMOUNT_PER_ARTICLE = "A";
+    private static final String INVALID_QUANTITY = "B";
 
     @Mock private CalculateurPrixView view;
     @Mock private AmountCalculator calculator;
+    @Mock private UserInputConverter converter;
 
     private CalculateurPrixPresenter calculateurPrixPresenter;
 
     @BeforeEach
     void setUp() {
         initMocks(this);
-        calculateurPrixPresenter = new CalculateurPrixPresenter(view, calculator);
+        calculateurPrixPresenter = new CalculateurPrixPresenter(view, calculator, converter);
     }
 
     @Test
-    void should_transform_article_price_to_big_decimal() {
-        String someArticlePriceAsString = "123.456";
-        BigDecimal expectedPrice = new BigDecimal(someArticlePriceAsString);
+    void should_convert_article_price_and_pass_it_to_calculator() throws Exception {
+        BigDecimal expectedPrice = new BigDecimal("123.456");
+        when(converter.convertToBigDecimal(SOME_AMOUNT_PER_ARTICLE)).thenReturn(expectedPrice);
 
-        calculateurPrixPresenter.onComputeButtonClicked(someArticlePriceAsString, SOME_QUANTITY, SOME_COUNTRY);
+        calculateurPrixPresenter.onComputeButtonClicked(SOME_AMOUNT_PER_ARTICLE, SOME_QUANTITY, SOME_COUNTRY);
 
         verify(calculator).calculateTotal(eq(expectedPrice), anyInt());
         verify(calculator).calculateTotalWithTax(eq(expectedPrice), anyInt(), any());
     }
 
     @Test
-    void should_transform_quantity_to_int() {
-        String someQuantityAsString = "123";
-        int expectedQuantity = Integer.valueOf(someQuantityAsString);
+    void should_convert_quantity_and_pass_it_to_calculator() throws Exception {
+        int expectedQuantity = Integer.valueOf("123");
+        when(converter.convertToQuantity(SOME_QUANTITY)).thenReturn(expectedQuantity);
 
-        calculateurPrixPresenter.onComputeButtonClicked(SOME_AMOUNT_PER_ARTICLE, someQuantityAsString, SOME_COUNTRY);
+        calculateurPrixPresenter.onComputeButtonClicked(SOME_AMOUNT_PER_ARTICLE, SOME_QUANTITY, SOME_COUNTRY);
 
         verify(calculator).calculateTotal(any(), eq(expectedQuantity));
         verify(calculator).calculateTotalWithTax(any(), eq(expectedQuantity), any());
@@ -88,5 +93,23 @@ public class CalculateurPrixPresenterTest {
         calculateurPrixPresenter.onComputeButtonClicked(SOME_AMOUNT_PER_ARTICLE, SOME_QUANTITY, SOME_COUNTRY);
 
         verify(view).setOrderAmountWithTax(CALCULATED_AMOUNT_WITH_TAX);
+    }
+
+    @Test
+    void should_display_an_error_if_amount_is_not_a_decimal_number() throws Exception {
+        when(converter.convertToBigDecimal(anyString())).thenThrow(InvalidAmount.class);
+
+        calculateurPrixPresenter.onComputeButtonClicked(INVALID_AMOUNT_PER_ARTICLE, SOME_QUANTITY, SOME_COUNTRY);
+
+        verify(view).displayError("Invalid decimal format for amount: " + INVALID_AMOUNT_PER_ARTICLE);
+    }
+
+    @Test
+    void should_display_an_error_if_quantity_is_not_an_integer() throws Exception {
+        when(converter.convertToQuantity(anyString())).thenThrow(InvalidQuantity.class);
+
+        calculateurPrixPresenter.onComputeButtonClicked(SOME_AMOUNT_PER_ARTICLE, INVALID_QUANTITY, SOME_COUNTRY);
+
+        verify(view).displayError("Invalid integer format for quantity: " + INVALID_QUANTITY);
     }
 }
